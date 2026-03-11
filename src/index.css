@@ -1,0 +1,614 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-black text-white antialiased font-light;
+  }
+}
+
+/* Âmbar para destaques na página Início. Para voltar ao branco: remova a classe text-amber-accent dos elementos. */
+.text-amber-accent {
+  color: #D4A553;
+}
+
+/* Hero headline no mobile: entrelinha confortável entre as linhas */
+@media (max-width: 639px) {
+  .hero-headline-mobile {
+    line-height: 1.28 !important;
+  }
+}
+
+/* Cursor customizado – círculo cinza, borda preta */
+.custom-cursor {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: rgba(120, 120, 120, 0.9);
+  border: 2px solid #000;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.5);
+}
+@media (pointer: coarse) {
+  .custom-cursor {
+    display: none !important;
+  }
+}
+
+/* Mesh gradient / smoke background */
+.mesh-gradient {
+  background: 
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(120, 120, 120, 0.15), transparent),
+    radial-gradient(ellipse 60% 40% at 80% 50%, rgba(80, 80, 80, 0.12), transparent),
+    radial-gradient(ellipse 50% 30% at 20% 80%, rgba(60, 60, 60, 0.08), transparent);
+}
+
+/* Fade do hero para o fundo preto – evita corte duro entre vídeo e próxima seção */
+.hero-fade-to-black {
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(0, 0, 0, 0.4) 40%,
+    rgba(0, 0, 0, 0.85) 75%,
+    #000 100%
+  );
+}
+
+/* Primary button glow (Hero CTA) */
+.btn-glow {
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.12), 0 0 40px rgba(255, 255, 255, 0.06);
+}
+.btn-glow:hover {
+  box-shadow: 0 0 25px rgba(255, 255, 255, 0.2), 0 0 50px rgba(255, 255, 255, 0.08);
+}
+
+/* Botões hero – estilo referência: pill, fundo escuro brilhante, borda em glow */
+.btn-hero-primary,
+.btn-hero-secondary {
+  background: linear-gradient(180deg, rgba(38, 38, 38, 0.95) 0%, rgba(20, 20, 20, 0.98) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.08),
+    0 1px 0 0 rgba(255, 255, 255, 0.06) inset,
+    0 0 20px rgba(255, 255, 255, 0.06);
+}
+.btn-hero-primary:hover,
+.btn-hero-secondary:hover {
+  border-color: rgba(255, 255, 255, 0.35);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.12),
+    0 1px 0 0 rgba(255, 255, 255, 0.08) inset,
+    0 0 24px rgba(255, 255, 255, 0.1);
+}
+.btn-hero-secondary {
+  background: linear-gradient(180deg, rgba(30, 30, 30, 0.9) 0%, rgba(15, 15, 15, 0.95) 100%);
+}
+
+/* Destaque extra para o botão principal do hero */
+.btn-hero-primary {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0.08) 100%);
+  border: 1.5px solid rgba(255, 255, 255, 0.7);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.4),
+    0 0 40px rgba(255, 255, 255, 0.4),
+    0 0 60px rgba(255, 255, 255, 0.15);
+  font-weight: 600;
+}
+.btn-hero-primary:hover {
+  transform: translateY(-2px) scale(1.02);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.28) 0%, rgba(255, 255, 255, 0.12) 100%);
+  border-color: rgba(255, 255, 255, 0.9);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.5),
+    0 0 48px rgba(255, 255, 255, 0.5),
+    0 0 80px rgba(255, 255, 255, 0.2);
+}
+
+/* Hero background video - full bleed, no controls, grayscale */
+.hero-video-wrap {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  z-index: 0;
+}
+.hero-video-wrap video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: saturate(0);
+}
+
+/* Faixa de logos do hero: logos em preto viram branco */
+.logo-marquee-img {
+  filter: brightness(0) invert(1);
+}
+
+/* Animação da seta em V (hint de scroll) */
+@keyframes scroll-arrow-bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+.scroll-arrow-bounce {
+  animation: scroll-arrow-bounce 1.6s ease-in-out infinite;
+}
+
+/* Marquee: rolagem contínua dos logos */
+@keyframes logo-marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+.logo-marquee-track {
+  display: flex;
+  width: max-content;
+  animation: logo-marquee 45s linear infinite;
+  will-change: transform;
+}
+
+/* Faixa centralizada com efeito de esfumaçar nas bordas */
+.logo-marquee-viewport {
+  mask-image: linear-gradient(
+    to right,
+    transparent 0,
+    black 12%,
+    black 88%,
+    transparent 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0,
+    black 12%,
+    black 88%,
+    transparent 100%
+  );
+}
+
+/* Esteira de habilidades – duas filas com fade no scroll */
+.skills-marquee-section .skills-marquee-viewport {
+  margin-top: 0.75rem;
+  mask-image: linear-gradient(to right, transparent 0, black 18%, black 82%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to right, transparent 0, black 18%, black 82%, transparent 100%);
+  opacity: 0;
+  transition: opacity 0.7s ease-out;
+}
+.skills-marquee-section .skills-marquee-viewport:first-child {
+  margin-top: 0;
+}
+.skills-marquee-section .skills-marquee-viewport.skills-row-visible {
+  opacity: 1;
+}
+.skills-marquee-section .skills-marquee-viewport[data-direction="right"].skills-row-visible {
+  transition-delay: 0.2s;
+}
+
+.skills-marquee-track {
+  display: flex;
+  width: max-content;
+  animation: skills-marquee-scroll 220s linear infinite;
+  will-change: transform;
+  gap: 0.75rem;
+}
+.skills-marquee-viewport[data-direction="right"] .skills-marquee-track {
+  animation-direction: reverse;
+}
+@keyframes skills-marquee-scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.skills-marquee-chip {
+  white-space: nowrap;
+}
+
+/* Luz verde “radar” – pulso forte no badge Disponível para projetos (barra e rodapé) */
+.radar-dot {
+  position: relative;
+  box-shadow: 0 0 0 0 rgba(52, 211, 153, 0.9);
+  animation: radar-ping 1.5s ease-out infinite;
+}
+.radar-dot::before {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  border: 2px solid rgba(52, 211, 153, 0.7);
+  animation: radar-ring 1.5s ease-out infinite;
+  pointer-events: none;
+}
+@keyframes radar-ping {
+  0% {
+    box-shadow: 0 0 0 0 rgba(52, 211, 153, 0.85), 0 0 12px 2px rgba(52, 211, 153, 0.4);
+  }
+  60% {
+    box-shadow: 0 0 0 12px rgba(52, 211, 153, 0), 0 0 20px 4px rgba(52, 211, 153, 0.15);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(52, 211, 153, 0), 0 0 8px 1px rgba(52, 211, 153, 0.2);
+  }
+}
+@keyframes radar-ring {
+  0% {
+    transform: scale(0.7);
+    opacity: 1;
+    border-color: rgba(52, 211, 153, 0.9);
+  }
+  100% {
+    transform: scale(3);
+    opacity: 0;
+    border-color: rgba(52, 211, 153, 0.2);
+  }
+}
+
+/* About section – Curtain (título), Fade (foto e corpo), Stagger (tags), Fade (CTA) */
+.about-body {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+.about-visible .about-body {
+  opacity: 1;
+  transform: translateY(0);
+}
+.about-body:nth-of-type(1) {
+  transition-delay: 0.2s;
+}
+.about-body:nth-of-type(2) {
+  transition-delay: 0.35s;
+}
+.about-curtain-line {
+  overflow: hidden;
+  display: block;
+  line-height: 1.25;
+}
+.about-curtain-line-inner {
+  display: block;
+  transform: translateY(100%);
+  transition: transform 0.85s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.about-visible .about-curtain-line-inner {
+  transform: translateY(0);
+}
+.about-curtain-line:nth-child(1) .about-curtain-line-inner {
+  transition-delay: 0ms;
+}
+.about-curtain-line:nth-child(2) .about-curtain-line-inner {
+  transition-delay: 140ms;
+}
+
+.about-photo-fade {
+  opacity: 0;
+  transition: opacity 0.9s ease-out;
+  transition-delay: 0.25s;
+}
+.about-visible .about-photo-fade {
+  opacity: 1;
+}
+
+.about-tag {
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 0.45s ease-out, transform 0.45s ease-out;
+}
+.about-visible .about-tag {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.about-cta {
+  opacity: 0;
+  transition: opacity 0.55s ease-out;
+  transition-delay: 1400ms;
+}
+.about-visible .about-cta {
+  opacity: 1;
+}
+
+/* Certified section – scroll reveal (imagem + texto) */
+.certified-img-wrap {
+  opacity: 0;
+  transform: translateX(-24px) scale(0.98);
+  transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1), transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.certified-img-wrap[data-visible="true"] {
+  opacity: 1;
+  transform: translateX(0) scale(1);
+}
+
+/* Recorte visual: remove borda branca da imagem do certificado */
+.certified-img-crop {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+.certified-img-crop img {
+  transform: scale(1.1);
+  transform-origin: center;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.certified-text-wrap {
+  opacity: 0;
+  transform: translateX(20px) translateY(12px);
+  transition: opacity 0.75s cubic-bezier(0.22, 1, 0.36, 1) 0.12s, transform 0.75s cubic-bezier(0.22, 1, 0.36, 1) 0.12s;
+}
+.certified-text-wrap[data-visible="true"] {
+  opacity: 1;
+  transform: translateX(0) translateY(0);
+}
+
+/* Services section – 3D card flip no scroll + hover (lift, glow, scale) */
+.services-cards-grid {
+  perspective: 1400px;
+  perspective-origin: 50% 50%;
+}
+
+.services-card-wrapper {
+  transform-style: preserve-3d;
+  transform: rotateY(-90deg);
+  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease;
+  box-shadow: 0 0 0 1px transparent;
+}
+
+.services-card-wrapper.services-card-visible {
+  transform: rotateY(0deg);
+}
+
+.services-card-wrapper:hover {
+  transform: rotateY(0deg) translateY(-8px) scale(1.02);
+  transition-delay: 0s;
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.25),
+    0 0 28px rgba(255, 255, 255, 0.1),
+    0 14px 44px rgba(0, 0, 0, 0.4);
+  backface-visibility: hidden;
+}
+
+.services-cards-grid .services-card-wrapper article {
+  -webkit-font-smoothing: subpixel-antialiased;
+  transform: translateZ(0);
+}
+
+/* Delay em sequência: 0s, 0.15s, 0.30s */
+.services-card-wrapper:nth-child(1) { transition-delay: 0s; }
+.services-card-wrapper:nth-child(2) { transition-delay: 0.15s; }
+.services-card-wrapper:nth-child(3) { transition-delay: 0.3s; }
+
+/* Testimonials – esteira/carrossel horizontal */
+.testimonials-marquee-viewport {
+  overflow: hidden;
+  mask-image: linear-gradient(
+    to right,
+    transparent 0,
+    black 10%,
+    black 90%,
+    transparent 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0,
+    black 10%,
+    black 90%,
+    transparent 100%
+  );
+}
+.testimonials-marquee-track {
+  display: flex;
+  gap: 1.5rem;
+  width: max-content;
+  animation: testimonials-marquee 55s linear infinite;
+  will-change: transform;
+}
+.testimonials-marquee-item {
+  flex: 0 0 48%;
+  max-width: 420px;
+  display: flex;
+}
+@keyframes testimonials-marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@media (max-width: 768px) {
+  .testimonials-marquee-item {
+    flex-basis: 100%;
+    max-width: 100%;
+  }
+}
+
+.testimonials-card {
+  min-height: 260px;
+}
+@media (min-width: 1024px) {
+  .testimonials-card {
+    min-height: 300px;
+  }
+}
+
+/* Process section – fade up em sequência (1, 2, 3) */
+.process-card {
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+.process-card.process-card-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── Portfólio: hover inversão (cinza ↔ branco) + scroll reveal ── */
+.portfolio-case-card:hover .portfolio-card-inner {
+  background: rgba(255, 255, 255, 0.98);
+  border-color: rgba(0, 0, 0, 0.08);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.06), 0 4px 24px rgba(0, 0, 0, 0.06);
+}
+.portfolio-case-card:hover .portfolio-card-client {
+  color: rgba(0, 0, 0, 0.5);
+}
+.portfolio-case-card:hover .portfolio-card-title {
+  color: #0f0f0f;
+}
+.portfolio-case-card:hover .portfolio-card-desc {
+  color: rgba(0, 0, 0, 0.65);
+}
+.portfolio-case-card:hover .portfolio-card-tag {
+  border-color: rgba(0, 0, 0, 0.2);
+  color: rgba(0, 0, 0, 0.6);
+}
+.portfolio-case-card:hover .portfolio-card-meta-type {
+  color: rgba(0, 0, 0, 0.5);
+}
+.portfolio-case-card:hover .portfolio-card-meta-value {
+  color: #0f0f0f;
+}
+.portfolio-case-card:hover .portfolio-card-meta-label {
+  color: rgba(0, 0, 0, 0.5);
+}
+.portfolio-case-card:hover .portfolio-card-arrow {
+  color: #0f0f0f;
+}
+/* Card destaque full: "Ver case completo" inverte no hover */
+.portfolio-case-card:hover .portfolio-card-cta {
+  color: #0f0f0f;
+}
+.portfolio-case-card {
+  opacity: 0;
+  transform: translateY(16px);
+}
+.portfolio-case-card.portfolio-case-card-visible {
+  animation: portfolioFadeUp 0.5s ease forwards;
+}
+.portfolio-case-card-coming.portfolio-case-card-visible {
+  opacity: 0.45;
+  animation: none;
+}
+@keyframes portfolioFadeUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ── Página de case: momento de resultado + pull quote + card especial ── */
+.case-result-glow {
+  box-shadow:
+    0 0 0 1px rgba(212, 165, 83, 0.15),
+    0 0 80px -20px rgba(212, 165, 83, 0.25),
+    0 0 120px -30px rgba(212, 165, 83, 0.12);
+}
+.case-copy-card {
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.08),
+    0 0 0 1px rgba(212, 165, 83, 0.08),
+    0 24px 48px -24px rgba(0, 0, 0, 0.4),
+    0 0 80px -30px rgba(212, 165, 83, 0.08);
+}
+.case-copy-card:hover {
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.1),
+    0 0 0 1px rgba(212, 165, 83, 0.12),
+    0 28px 56px -24px rgba(0, 0, 0, 0.45),
+    0 0 100px -20px rgba(212, 165, 83, 0.12);
+}
+.case-pull-quote {
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(212, 165, 83, 0.04) 30%,
+    rgba(212, 165, 83, 0.06) 50%,
+    rgba(212, 165, 83, 0.04) 70%,
+    transparent 100%
+  );
+}
+.case-briefing-accent {
+  border-left: 3px solid rgba(212, 165, 83, 0.5);
+  padding-left: 1.25rem;
+}
+.case-other-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px -12px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(255, 255, 255, 0.08);
+}
+
+/* Final CTA section – ajusta enquadramento do vídeo */
+.final-cta-video {
+  transform: translateY(-10px);
+}
+@media (min-width: 1024px) {
+  .final-cta-video {
+    transform: translateY(-18px);
+  }
+}
+
+/* Página Sobre – hero, timeline e formação (ordem e efeitos do reference) */
+.sobre-fade-up {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Timeline: item entra com fade + translate + zoom mais marcado */
+.sobre-tl-item {
+  opacity: 0;
+  transform: translateY(24px) scale(0.94);
+  transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+}
+.sobre-tl-item.sobre-tl-visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+.sobre-tl-item:hover .sobre-tl-dot {
+  background: #D4A553;
+  border-color: #D4A553;
+}
+
+@media (min-width: 640px) {
+  .sobre-timeline::before {
+    content: '';
+    position: absolute;
+    top: 8px;
+    bottom: 8px;
+    left: 150px;
+    width: 1px;
+    background: rgba(255, 255, 255, 0.16);
+    transform-origin: top center;
+    opacity: 0;
+    transform: scaleY(0);
+    transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+  }
+
+  .sobre-timeline.sobre-timeline-active::before {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+}
+
+/* Formação: item entra com fade + translate */
+.sobre-cert-item {
+  opacity: 0;
+  transform: translateY(12px) scale(0.97);
+  transition: opacity 0.55s ease-out, transform 0.55s ease-out;
+}
+.sobre-cert-item.sobre-cert-visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+

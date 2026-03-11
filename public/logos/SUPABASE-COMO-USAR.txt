@@ -1,0 +1,28 @@
+Como usar os logos pelo Supabase (recomendado)
+==============================================
+
+1. Acesse https://supabase.com e crie um projeto (ou use um existente).
+
+2. No menu: Storage → Create a new bucket.
+   - Nome: por exemplo "logos"
+   - Marque "Public bucket" (público).
+   - Crie o bucket.
+
+3. Abra o bucket → Upload → envie os 9 PNGs:
+   ulbra.png, dell.png, gerdau.png, weg.png, randon.png,
+   ibasa.png, petite-jolie.png, romanzza.png, zenklub.png
+
+4. Clique em um arquivo → copie a "Public URL".
+   A URL será algo como:
+   https://SEU_PROJECT.supabase.co/storage/v1/object/public/logos/ulbra.png
+
+   A parte que você precisa é até a pasta do bucket (com a barra no final):
+   https://SEU_PROJECT.supabase.co/storage/v1/object/public/logos/
+
+5. No projeto, abra: src/components/LogoMarquee.jsx
+   Na linha onde está:
+     const SUPABASE_LOGOS_BASE = ''
+   Cole a URL base entre as aspas, por exemplo:
+     const SUPABASE_LOGOS_BASE = 'https://abcdefgh.supabase.co/storage/v1/object/public/logos/'
+
+6. Salve e recarregue o site. Os logos passarão a vir do Supabase.
