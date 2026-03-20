@@ -1,4 +1,3 @@
-import { useEffect, useRef, useState } from 'react'
 import { HERO_VIDEO_SRC } from './HeroSection'
 import { useLanguage } from '../hooks/useLanguage'
 import { messages } from '../i18n/messages'
@@ -8,70 +7,24 @@ const WHATSAPP_URL = 'https://wa.me/5551998655005'
 export default function FinalCtaSection() {
   const { lang } = useLanguage()
   const t = messages[lang].home.finalCta
-  const [videoError, setVideoError] = useState(false)
-  const [videoReady, setVideoReady] = useState(false)
-  const videoRef = useRef(null)
-  const srcSetRef = useRef(false)
-
-  useEffect(() => {
-    if (videoError || srcSetRef.current) return
-    const video = videoRef.current
-    if (!video) return
-
-    // Garantia explícita para mobile (iOS Safari / Chrome Android)
-    video.autoplay = true
-    video.muted = true
-    video.loop = true
-    video.playsInline = true
-    video.controls = false
-    video.removeAttribute('controls')
-    video.setAttribute('playsinline', '')
-    video.setAttribute('webkit-playsinline', '')
-    video.preload = 'auto'
-
-    video.src = HERO_VIDEO_SRC
-
-    // Tenta iniciar imediatamente (sem depender apenas de handlers)
-    try {
-      const p = video.play()
-      if (p && typeof p.catch === 'function') p.catch(() => {})
-    } catch {
-      // noop
-    }
-
-    srcSetRef.current = true
-  }, [videoError])
-
-  const handleVideoCanPlay = () => setVideoReady(true)
-  const handleVideoError = () => setVideoError(true)
 
   return (
     <section className="relative overflow-hidden bg-black pt-24 pb-14 sm:pt-32 sm:pb-16 lg:pt-40 lg:pb-20">
-      {/* Background video - mesmo comportamento do Hero */}
-      {!videoError && (
-        <div className="hero-video-wrap bg-black" aria-hidden>
-          <video
-            ref={videoRef}
-            muted
-            loop
-            autoPlay
-            playsInline
-            webkit-playsinline="true"
-            preload="auto"
-            controls={false}
-            controlsList="nodownload nofullscreen noremoteplayback"
-            disablePictureInPicture
-            disableRemotePlayback
-            style={{ pointerEvents: 'none' }}
-            className={`final-cta-video absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ${
-              videoReady ? 'opacity-100' : 'opacity-0'
-            }`}
-            onCanPlay={handleVideoCanPlay}
-            onPlaying={handleVideoCanPlay}
-            onError={handleVideoError}
-          />
-        </div>
-      )}
+      <div className="hero-video-wrap bg-black" aria-hidden>
+        <video
+          src={HERO_VIDEO_SRC}
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+          disablePictureInPicture
+          disableRemotePlayback
+          controlsList="nodownload nofullscreen noremoteplayback"
+          style={{ pointerEvents: 'none' }}
+          className="final-cta-video absolute inset-0 h-full w-full object-cover"
+        />
+      </div>
 
       {/* Mesh gradient + fades, igual ao hero (topo e base) */}
       <div className="mesh-gradient pointer-events-none absolute inset-0 z-[1]" aria-hidden />

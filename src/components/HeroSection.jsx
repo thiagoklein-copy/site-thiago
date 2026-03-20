@@ -1,4 +1,3 @@
-import { useState, useRef, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import LogoMarquee from './LogoMarquee'
 
@@ -25,72 +24,28 @@ export default function HeroSection({
   const primaryProps = isExternal(primaryCtaHref) ? { href: primaryCtaHref, target: '_blank', rel: 'noopener noreferrer' } : { to: primaryCtaHref }
   const secondaryProps = isExternal(secondaryCtaHref) ? { href: secondaryCtaHref, target: '_blank', rel: 'noopener noreferrer' } : { to: secondaryCtaHref }
 
-  const [videoError, setVideoError] = useState(false)
-  const [videoReady, setVideoReady] = useState(false)
-  const videoRef = useRef(null)
-  const srcSetRef = useRef(false)
-
-  // Carrega o vídeo só após o hero estar na tela, liberando a primeira pintura da página
-  useEffect(() => {
-    if (videoError || srcSetRef.current) return
-    const video = videoRef.current
-    if (!video) return
-
-    // Garantia explícita para mobile (iOS Safari / Chrome Android)
-    video.autoplay = true
-    video.muted = true
-    video.loop = true
-    video.playsInline = true
-    video.controls = false
-    video.removeAttribute('controls')
-    video.setAttribute('playsinline', '')
-    video.setAttribute('webkit-playsinline', '')
-    video.preload = 'auto'
-
-    video.src = HERO_VIDEO_SRC
-
-    // Tenta iniciar imediatamente (sem depender apenas de handlers)
-    try {
-      const p = video.play()
-      if (p && typeof p.catch === 'function') p.catch(() => {})
-    } catch {
-      // noop
-    }
-
-    srcSetRef.current = true
-  }, [videoError])
-
-  const handleVideoCanPlay = () => setVideoReady(true)
-  const handleVideoError = () => setVideoError(true)
-
   return (
     <section
       className="relative flex min-h-screen flex-col overflow-hidden px-4 pt-28 pb-32 sm:px-6 sm:pt-32 sm:pb-36 lg:px-8 lg:pt-40 lg:pb-40"
       aria-labelledby="hero-title"
     >
-      {/* Background video - carregamento adiado; fundo preto até o vídeo estar pronto */}
-      {!videoError && (
-        <div className="hero-video-wrap bg-black" aria-hidden>
-          <video
-            ref={videoRef}
-            muted
-            loop
-            autoPlay
-            playsInline
-            webkit-playsinline="true"
-            preload="auto"
-            controls={false}
-            controlsList="nodownload nofullscreen noremoteplayback"
-            disablePictureInPicture
-            disableRemotePlayback
-            style={{ pointerEvents: 'none' }}
-            className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ${videoReady ? 'opacity-100' : 'opacity-0'}`}
-            onCanPlay={handleVideoCanPlay}
-            onPlaying={handleVideoCanPlay}
-            onError={handleVideoError}
-          />
-        </div>
-      )}
+      <div className="hero-video-wrap bg-black" aria-hidden>
+        <video
+          src={HERO_VIDEO_SRC}
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+          disablePictureInPicture
+          disableRemotePlayback
+          controlsList="nodownload nofullscreen noremoteplayback"
+          style={{ pointerEvents: 'none' }}
+          className="absolute inset-0 h-full w-full object-cover"
+          onCanPlay={() => {}}
+          onError={() => {}}
+        />
+      </div>
 
       {/* Mesh gradient overlay */}
       <div className="mesh-gradient pointer-events-none absolute inset-0 z-[1]" />
