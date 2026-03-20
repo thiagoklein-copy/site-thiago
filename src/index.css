@@ -144,6 +144,17 @@ video::-webkit-media-controls-overlay-play-button {
   display: none !important;
 }
 
+video::-webkit-media-controls-play-button,
+video::-webkit-media-controls-fullscreen-button,
+video::-webkit-media-controls-timeline,
+video::-webkit-media-controls-current-time-display,
+video::-webkit-media-controls-time-remaining-display,
+video::-webkit-media-controls-volume-slider,
+video::-webkit-media-controls-mute-button,
+video::-webkit-media-controls-toggle-closed-captions-button {
+  display: none !important;
+}
+
 /* Faixa de logos do hero: logos em preto viram branco */
 .logo-marquee-img {
   filter: brightness(0) invert(1);

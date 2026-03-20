@@ -73,6 +73,7 @@ function ReviewCard({ review, lang }) {
 }
 
 export default function TestimonialsSection() {
+  const AUTOPLAY_INTERVAL_MS = 5000
   const { lang } = useLanguage()
   const t = messages[lang].home.testimonials
   const [animateStats] = useState(true)
@@ -83,6 +84,16 @@ export default function TestimonialsSection() {
     setCarouselIndex((i) => (i - 1 + t.reviews.length) % t.reviews.length)
 
   const goNext = () => setCarouselIndex((i) => (i + 1) % t.reviews.length)
+
+  useEffect(() => {
+    if (totalReviews <= 1) return
+
+    const intervalId = window.setInterval(() => {
+      setCarouselIndex((i) => (i + 1) % totalReviews)
+    }, AUTOPLAY_INTERVAL_MS)
+
+    return () => window.clearInterval(intervalId)
+  }, [totalReviews])
 
   const stats = [
     { id: 'satisfaction', value: 97, suffix: '%', label: t.statSatisfaction },

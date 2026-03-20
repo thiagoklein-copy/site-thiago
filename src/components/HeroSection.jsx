@@ -80,6 +80,9 @@ export default function HeroSection({
             webkit-playsinline="true"
             preload="auto"
             controls={false}
+            controlsList="nodownload nofullscreen noremoteplayback"
+            disablePictureInPicture
+            disableRemotePlayback
             style={{ pointerEvents: 'none' }}
             className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ${videoReady ? 'opacity-100' : 'opacity-0'}`}
             onCanPlay={handleVideoCanPlay}
