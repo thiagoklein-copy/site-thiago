@@ -27,16 +27,8 @@ export default function HeroSection({
 
   const [videoError, setVideoError] = useState(false)
   const [videoReady, setVideoReady] = useState(false)
-  const [shouldRenderVideo, setShouldRenderVideo] = useState(true)
   const videoRef = useRef(null)
   const srcSetRef = useRef(false)
-
-  useEffect(() => {
-    if (typeof navigator === 'undefined') return
-    const ua = navigator.userAgent || ''
-    const isIOS = /iPad|iPhone|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)
-    if (isIOS) setShouldRenderVideo(false)
-  }, [])
 
   // Carrega o vídeo só após o hero estar na tela, liberando a primeira pintura da página
   useEffect(() => {
@@ -77,7 +69,7 @@ export default function HeroSection({
       aria-labelledby="hero-title"
     >
       {/* Background video - carregamento adiado; fundo preto até o vídeo estar pronto */}
-      {shouldRenderVideo && !videoError && (
+      {!videoError && (
         <div className="hero-video-wrap bg-black" aria-hidden>
           <video
             ref={videoRef}

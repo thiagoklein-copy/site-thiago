@@ -10,16 +10,8 @@ export default function FinalCtaSection() {
   const t = messages[lang].home.finalCta
   const [videoError, setVideoError] = useState(false)
   const [videoReady, setVideoReady] = useState(false)
-  const [shouldRenderVideo, setShouldRenderVideo] = useState(true)
   const videoRef = useRef(null)
   const srcSetRef = useRef(false)
-
-  useEffect(() => {
-    if (typeof navigator === 'undefined') return
-    const ua = navigator.userAgent || ''
-    const isIOS = /iPad|iPhone|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)
-    if (isIOS) setShouldRenderVideo(false)
-  }, [])
 
   useEffect(() => {
     if (videoError || srcSetRef.current) return
@@ -56,7 +48,7 @@ export default function FinalCtaSection() {
   return (
     <section className="relative overflow-hidden bg-black pt-24 pb-14 sm:pt-32 sm:pb-16 lg:pt-40 lg:pb-20">
       {/* Background video - mesmo comportamento do Hero */}
-      {shouldRenderVideo && !videoError && (
+      {!videoError && (
         <div className="hero-video-wrap bg-black" aria-hidden>
           <video
             ref={videoRef}
