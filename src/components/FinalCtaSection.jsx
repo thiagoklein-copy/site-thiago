@@ -17,8 +17,28 @@ export default function FinalCtaSection() {
     if (videoError || srcSetRef.current) return
     const video = videoRef.current
     if (!video) return
-    video.src = HERO_VIDEO_SRC
+
+    // Garantia explícita para mobile (iOS Safari / Chrome Android)
+    video.autoplay = true
+    video.muted = true
+    video.loop = true
+    video.playsInline = true
+    video.controls = false
+    video.removeAttribute('controls')
+    video.setAttribute('playsinline', '')
+    video.setAttribute('webkit-playsinline', '')
     video.preload = 'auto'
+
+    video.src = HERO_VIDEO_SRC
+
+    // Tenta iniciar imediatamente (sem depender apenas de handlers)
+    try {
+      const p = video.play()
+      if (p && typeof p.catch === 'function') p.catch(() => {})
+    } catch {
+      // noop
+    }
+
     srcSetRef.current = true
   }, [videoError])
 
@@ -36,10 +56,15 @@ export default function FinalCtaSection() {
             loop
             autoPlay
             playsInline
+            webkit-playsinline="true"
+            preload="auto"
+            controls={false}
+            style={{ pointerEvents: 'none' }}
             className={`final-cta-video absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ${
               videoReady ? 'opacity-100' : 'opacity-0'
             }`}
             onCanPlay={handleVideoCanPlay}
+            onPlaying={handleVideoCanPlay}
             onError={handleVideoError}
           />
         </div>

@@ -57,12 +57,12 @@ function StarRating({ value, lang }) {
 
 function ReviewCard({ review, lang }) {
   return (
-    <article className="testimonials-card flex h-full flex-col rounded-2xl border border-white/10 bg-white/5 p-7 backdrop-blur-sm sm:p-9">
+    <article className="testimonials-card flex flex-col rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-sm sm:p-7 lg:p-9">
       <div>
         <h4 className="font-semibold text-white">{review.name}</h4>
         <p className="text-sm text-white/60">{review.role}</p>
       </div>
-      <p className="mt-4 flex-1 text-base leading-relaxed text-white/80">
+      <p className="mt-4 text-base leading-relaxed text-white/80">
         "{review.quote}"
       </p>
       <div className="mt-4">
@@ -75,8 +75,14 @@ function ReviewCard({ review, lang }) {
 export default function TestimonialsSection() {
   const { lang } = useLanguage()
   const t = messages[lang].home.testimonials
-  const sectionRef = useRef(null)
-  const [animateStats, setAnimateStats] = useState(false)
+  const [animateStats] = useState(true)
+  const [carouselIndex, setCarouselIndex] = useState(0)
+  const totalReviews = t.reviews.length
+
+  const goPrev = () =>
+    setCarouselIndex((i) => (i - 1 + t.reviews.length) % t.reviews.length)
+
+  const goNext = () => setCarouselIndex((i) => (i + 1) % t.reviews.length)
 
   const stats = [
     { id: 'satisfaction', value: 97, suffix: '%', label: t.statSatisfaction },
@@ -84,29 +90,9 @@ export default function TestimonialsSection() {
     { id: 'brands', value: 40, suffix: '+', label: t.statBrands },
   ]
 
-  useEffect(() => {
-    const section = sectionRef.current
-    if (!section) return
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setAnimateStats(true)
-          observer.disconnect()
-        }
-      },
-      { threshold: 0.2 }
-    )
-
-    observer.observe(section)
-
-    return () => observer.disconnect()
-  }, [])
-
   return (
     <section
       id="depoimentos"
-      ref={sectionRef}
       className="relative border-t border-white/10 py-20 sm:py-24 lg:py-32"
     >
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
@@ -126,16 +112,48 @@ export default function TestimonialsSection() {
           ))}
         </div>
 
-        {/* Reviews marquee */}
-        <div className="testimonials-marquee-viewport mt-14 sm:mt-16">
-          <div className="testimonials-marquee-track">
-            {[...t.reviews, ...t.reviews].map((review, i) => (
-              <div key={i} className="testimonials-marquee-item">
-                <ReviewCard review={review} lang={lang} />
-              </div>
-            ))}
+        {/* Reviews – carrossel: só translateX no track (sem display none/flex por slide) */}
+        <div className="testimonials-carousel mt-14 sm:mt-16" style={{ position: 'relative' }}>
+          <button
+            type="button"
+            onClick={goPrev}
+            className="testimonials-carousel-btn"
+            aria-label={lang === 'en' ? 'Previous testimonial' : 'Anterior'}
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
+              <path d="M15 18l-6-6 6-6" />
+            </svg>
+          </button>
+
+          <div className="testimonials-carousel-viewport">
+            <div
+              className="testimonials-carousel-track"
+              style={{ transform: `translateX(-${carouselIndex * 100}%)` }}
+            >
+              {t.reviews.map((review, i) => (
+                <div key={i} className="testimonials-carousel-slide">
+                  <ReviewCard review={review} lang={lang} />
+                </div>
+              ))}
+            </div>
           </div>
+
+          <button
+            type="button"
+            onClick={goNext}
+            className="testimonials-carousel-btn"
+            aria-label={lang === 'en' ? 'Next testimonial' : 'Próximo'}
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
+              <path d="M9 18l6-6-6-6" />
+            </svg>
+          </button>
         </div>
+        {totalReviews > 0 && (
+          <p className="mt-4 text-center text-xs text-white/50 sm:text-sm">
+            {carouselIndex + 1} / {totalReviews}
+          </p>
+        )}
 
         {/* Trusted by avatars */}
         <div className="mt-10 flex items-center justify-center gap-3 text-sm text-white/70 sm:mt-12">

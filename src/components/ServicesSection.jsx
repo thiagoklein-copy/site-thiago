@@ -1,4 +1,3 @@
-import { useState, useRef, useEffect } from 'react'
 import { useLanguage } from '../hooks/useLanguage'
 import { messages } from '../i18n/messages'
 
@@ -7,28 +6,9 @@ const WHATSAPP_URL = 'https://wa.me/5551998655005'
 export default function ServicesSection() {
   const { lang } = useLanguage()
   const t = messages[lang].home.services
-  const sectionRef = useRef(null)
-  const [isVisible, setIsVisible] = useState(false)
-
-  useEffect(() => {
-    const el = sectionRef.current
-    if (!el) return
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const [entry] = entries
-        if (entry.isIntersecting) setIsVisible(true)
-      },
-      { threshold: 0.5, rootMargin: '-22% 0px 0px 0px' }
-    )
-
-    observer.observe(el)
-    return () => observer.disconnect()
-  }, [])
 
   return (
     <section
-      ref={sectionRef}
       id="servicos"
       className="services-cards-section relative border-t border-white/10 bg-black py-14 sm:py-16 lg:py-20"
       aria-labelledby="servicos-heading"
@@ -48,7 +28,7 @@ export default function ServicesSection() {
           {t.list.map((service) => (
             <div
               key={service.id}
-              className={`services-card-wrapper h-full rounded-2xl border border-white/10 bg-white/[0.04] ${isVisible ? 'services-card-visible' : ''}`}
+              className="services-card-wrapper services-card-visible h-full rounded-2xl border border-white/10 bg-white/[0.04]"
             >
               <article className="flex h-full min-h-0 flex-col p-5 sm:p-6">
                 <h3 className="text-lg font-semibold tracking-tight text-white sm:text-xl">

@@ -119,6 +119,29 @@
   height: 100%;
   object-fit: cover;
   filter: saturate(0);
+  pointer-events: none;
+}
+
+/* Esconde o botão de play nativo e quaisquer controles no Safari Mobile */
+video::-webkit-media-controls-start-playback-button {
+  display: none !important;
+  -webkit-appearance: none;
+}
+
+video::-webkit-media-controls {
+  display: none !important;
+}
+
+video::-webkit-media-controls-enclosure {
+  display: none !important;
+}
+
+video::-webkit-media-controls-panel {
+  display: none !important;
+}
+
+video::-webkit-media-controls-overlay-play-button {
+  display: none !important;
 }
 
 /* Faixa de logos do hero: logos em preto viram branco */
@@ -353,25 +376,27 @@
   transform: translateX(0) translateY(0);
 }
 
-/* Services section – 3D card flip no scroll + hover (lift, glow, scale) */
+/* Services section – cards sempre visíveis, layout simples (sem 3D) */
 .services-cards-grid {
-  perspective: 1400px;
-  perspective-origin: 50% 50%;
+  display: grid;
 }
 
 .services-card-wrapper {
-  transform-style: preserve-3d;
-  transform: rotateY(-90deg);
-  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease;
+  display: block;
+  transform: none;
+  opacity: 1;
+  visibility: visible;
+  transform-style: flat;
+  transition: transform 0.3s ease, box-shadow 0.35s ease;
   box-shadow: 0 0 0 1px transparent;
 }
 
 .services-card-wrapper.services-card-visible {
-  transform: rotateY(0deg);
+  transform: none;
 }
 
 .services-card-wrapper:hover {
-  transform: rotateY(0deg) translateY(-8px) scale(1.02);
+  transform: translateY(-8px) scale(1.02);
   transition-delay: 0s;
   box-shadow:
     0 0 0 1px rgba(255, 255, 255, 0.25),
@@ -390,58 +415,161 @@
 .services-card-wrapper:nth-child(2) { transition-delay: 0.15s; }
 .services-card-wrapper:nth-child(3) { transition-delay: 0.3s; }
 
-/* Testimonials – esteira/carrossel horizontal */
-.testimonials-marquee-viewport {
-  overflow: hidden;
-  mask-image: linear-gradient(
-    to right,
-    transparent 0,
-    black 10%,
-    black 90%,
-    transparent 100%
-  );
-  -webkit-mask-image: linear-gradient(
-    to right,
-    transparent 0,
-    black 10%,
-    black 90%,
-    transparent 100%
-  );
-}
-.testimonials-marquee-track {
-  display: flex;
-  gap: 1.5rem;
-  width: max-content;
-  animation: testimonials-marquee 55s linear infinite;
-  will-change: transform;
-}
-.testimonials-marquee-item {
-  flex: 0 0 48%;
-  max-width: 420px;
-  display: flex;
-}
-@keyframes testimonials-marquee {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(-50%);
-  }
-}
-
+/* Mobile (<= 768px): cards em coluna (stack), sempre visíveis, sem 3D e sem clipping */
 @media (max-width: 768px) {
-  .testimonials-marquee-item {
-    flex-basis: 100%;
-    max-width: 100%;
+  #servicos.services-cards-section,
+  .services-cards-section {
+    overflow: visible !important;
+    display: block !important;
+    height: auto !important;
+    min-height: 0; /* permite scroll natural */
+  }
+
+  .services-cards-section .mx-auto {
+    overflow: visible !important;
+    height: auto !important;
+  }
+
+  /* fallback robusto: usa flex-col em vez de grid, pra evitar colapso de grid em iOS */
+  .services-cards-grid {
+    min-height: 0;
+    perspective: none !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 1rem !important;
+    overflow: visible !important;
+  }
+
+  .services-cards-section .services-cards-grid .services-card-wrapper,
+  .services-cards-section .services-card-wrapper,
+  .services-card-wrapper {
+    display: block !important;
+    height: auto !important;
+    min-height: 180px !important;
+    transform: none !important;
+    transform-style: flat !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    backface-visibility: visible !important;
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1);
+  }
+
+  .services-cards-section .services-cards-grid .services-card-wrapper article,
+  .services-cards-grid .services-card-wrapper article {
+    transform: none !important;
+    height: auto !important;
+    min-height: 0 !important;
   }
 }
 
-.testimonials-card {
-  min-height: 260px;
+/* Fallback: quando a seção tem data-mobile (JS detectou mobile), força cards visíveis */
+.services-cards-section[data-mobile="true"] .services-card-wrapper {
+  transform: none !important;
+  opacity: 1 !important;
+  visibility: visible !important;
 }
+
+/* ===== TESTIMONIALS CAROUSEL ===== */
+.testimonials-carousel {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+.testimonials-carousel-viewport {
+  flex: 1;
+  min-width: 0;
+  width: 100%;
+  overflow: hidden;
+  display: block;
+  -webkit-overflow-scrolling: touch;
+}
+
+.testimonials-carousel-track {
+  display: flex;
+  flex-wrap: nowrap;
+  width: 100%;
+  transition: transform 0.45s ease;
+}
+
+.testimonials-carousel-slide {
+  flex: 0 0 100%;
+  min-width: 0;
+  width: 100%;
+  display: flex;
+  align-items: stretch;
+}
+
+.testimonials-carousel-slide article {
+  width: 100%;
+  max-width: 540px;
+  margin: 0 auto;
+}
+
+/* Card */
+.testimonials-card {
+  width: 100%;
+  height: auto;
+  min-height: unset;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+@media (min-width: 640px) {
+  .testimonials-card {
+    min-height: 260px;
+  }
+}
+
 @media (min-width: 1024px) {
   .testimonials-card {
     min-height: 300px;
+  }
+}
+
+/* Botões */
+.testimonials-carousel-btn {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.06);
+  color: white;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.testimonials-carousel-btn:hover {
+  background: rgba(255, 255, 255, 0.14);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+/* Mobile */
+@media (max-width: 639px) {
+  .testimonials-carousel {
+    gap: 0.4rem;
+  }
+
+  .testimonials-carousel-btn {
+    width: 36px;
+    height: 36px;
+  }
+
+  .testimonials-carousel-slide article {
+    max-width: 100%;
+  }
+
+  .testimonials-card {
+    padding: 18px !important;
   }
 }
 
