@@ -387,23 +387,25 @@ video::-webkit-media-controls-toggle-closed-captions-button {
   transform: translateX(0) translateY(0);
 }
 
-/* Services section – cards sempre visíveis, layout simples (sem 3D) */
+/* Services section – cards com fade em sequência no scroll */
 .services-cards-grid {
   display: grid;
 }
 
 .services-card-wrapper {
   display: block;
-  transform: none;
-  opacity: 1;
-  visibility: visible;
+  transform: translateY(18px);
+  opacity: 0;
+  visibility: hidden;
   transform-style: flat;
-  transition: transform 0.3s ease, box-shadow 0.35s ease;
+  transition: opacity 0.55s ease, transform 0.55s ease, box-shadow 0.35s ease;
   box-shadow: 0 0 0 1px transparent;
 }
 
 .services-card-wrapper.services-card-visible {
+  opacity: 1;
   transform: none;
+  visibility: visible;
 }
 
 .services-card-wrapper:hover {
@@ -457,10 +459,7 @@ video::-webkit-media-controls-toggle-closed-captions-button {
     display: block !important;
     height: auto !important;
     min-height: 180px !important;
-    transform: none !important;
     transform-style: flat !important;
-    opacity: 1 !important;
-    visibility: visible !important;
     backface-visibility: visible !important;
     box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1);
   }
